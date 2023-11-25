@@ -1,116 +1,187 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>2048 AI</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>2048 AI</title>
 
-  <link href="style/main.css" rel="stylesheet" type="text/css">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
-  <link rel="apple-touch-startup-image" href="meta/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
-  <link rel="apple-touch-startup-image" href="meta/apple-touch-startup-image-640x920.png"  media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone, retina -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="style/main.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="meta/apple-touch-icon.png" />
+    <link
+      rel="apple-touch-startup-image"
+      href="meta/apple-touch-startup-image-640x1096.png"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <!-- iPhone 5+ -->
+    <link
+      rel="apple-touch-startup-image"
+      href="meta/apple-touch-startup-image-640x920.png"
+      media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"
+    />
+    <!-- iPhone, retina -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
-</head>
-<body>
-<div id="fb-root"></div>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta
+      name="viewport"
+      content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+  </head>
+  <body>
+    <div id="fb-root"></div>
 
-  <div class="container">
-    <div class="heading">
-      <h1 class="title">2048</h1>
-      <div class="scores-container">
-        <div class="score-container">0</div>
-        <div class="best-container">0</div>
+    <div class="container">
+      <div class="heading">
+        <div>
+          <h1 class="title">2048</h1>
+        </div>
+        <div class="scores-container">
+          <div class="score-container">0</div>
+          <div class="best-container">0</div>
+        </div>
       </div>
-    </div>
 
-    <div class="above-game">
-      <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
-      <a class="restart-button">New Game</a>
-    </div>
+      <div class="above-game">
+        <p class="game-intro">
+          Join the numbers and get to the <strong>2048 tile!</strong>
+        </p>
+        <a class="restart-button">New Game</a>
+      </div>
 
-    <div id="ai-container" class="ai-container">
+      <div id="ai-container" class="ai-container">
         <a class="start-ai-deep-button">Run AI (Deep)</a>
         <a class="start-ai-fast-button">Run AI (Fast)</a>
+      </div>
+
+      <div class="game-container">
+        <div class="game-message">
+          <p></p>
+          <div class="lower">
+            <a class="keep-playing-button">Keep going</a>
+            <a class="retry-button">Try again</a>
+          </div>
+        </div>
+
+        <div class="grid-container">
+          <div class="grid-row">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+          </div>
+          <div class="grid-row">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+          </div>
+          <div class="grid-row">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+          </div>
+          <div class="grid-row">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+          </div>
+        </div>
+
+        <div class="tile-container"></div>
+      </div>
+
+      <hr />
+
+      <!-- <button onclick="startTimer()">Start</button>
+      <button onclick="stopTimer()">Stop</button>
+      <button onclick="resetTimer()">Reset</button> -->
+
+      <script>
+        let timer;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+
+        function startTimer() {
+          timer = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+          clearInterval(timer);
+        }
+
+        function resetTimer() {
+          clearInterval(timer);
+          seconds = 0;
+          minutes = 0;
+          hours = 0;
+          updateDisplay();
+        }
+
+        function updateTimer() {
+          seconds++;
+          if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes === 60) {
+              minutes = 0;
+              hours++;
+            }
+          }
+          updateDisplay();
+        }
+
+        function updateDisplay() {
+          const formattedTime =
+            pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+          document.getElementById("timer").innerText = formattedTime;
+        }
+
+        function pad(value) {
+          return value < 10 ? "0" + value : value;
+        }
+      </script>
     </div>
 
-    <div class="game-container">
-      <div class="game-message">
-        <p></p>
-        <div class="lower">
-	        <a class="keep-playing-button">Keep going</a>
-          <a class="retry-button">Try again</a>
-        </div>
-      </div>
-
-      <div class="grid-container">
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-        <div class="grid-row">
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-          <div class="grid-cell"></div>
-        </div>
-      </div>
-
-      <div class="tile-container">
-
-      </div>
-    </div>
-
-    <hr>
-    <p>
-        AI created by <a href="http://codemyroad.wordpress.com" target="_blank">Yiyuan Lee</a>. Source code available <a href="http://github.com/LeeYiyuan/2048ai" target="_blank">here</a>. Original game created by <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a>
-        </p>
-      <p>
-        Click <a href="http://codemyroad.wordpress.com/2014/05/14/2048-ai-the-intelligent-bot/" target="_blank">here</a> for more info on the AI.
-    </p>
-
-      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://leeyiyuan.github.io/2048ai" data-via="LeeYiyuan">Tweet</a>
-      <div class="fb-like" data-href="http://leeyiyuan.github.io/2048ai" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
-  </div>
-
-  <script src="js/c_expectimax.js"></script>
-  <script src="js/expectimax.js"></script>
-  <script src="js/bind_polyfill.js"></script>
-  <script src="js/classlist_polyfill.js"></script>
-  <script src="js/animframe_polyfill.js"></script>
-  <script src="js/keyboard_input_manager.js"></script>
-  <script src="js/html_actuator.js"></script>
-  <script src="js/grid.js"></script>
-  <script src="js/tile.js"></script>
-  <script src="js/local_storage_manager.js"></script>
-  <script src="js/game_manager.js"></script>
-  <script src="js/application.js"></script>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-  <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
-
-</body>
+    <script src="js/c_expectimax.js"></script>
+    <script src="js/expectimax.js"></script>
+    <script src="js/bind_polyfill.js"></script>
+    <script src="js/classlist_polyfill.js"></script>
+    <script src="js/animframe_polyfill.js"></script>
+    <script src="js/keyboard_input_manager.js"></script>
+    <script src="js/html_actuator.js"></script>
+    <script src="js/grid.js"></script>
+    <script src="js/tile.js"></script>
+    <script src="js/local_storage_manager.js"></script>
+    <script src="js/game_manager.js"></script>
+    <script src="js/application.js"></script>
+    <script>
+      !(function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0],
+          p = /^http:/.test(d.location) ? "http" : "https";
+        if (!d.getElementById(id)) {
+          js = d.createElement(s);
+          js.id = id;
+          js.src = p + "://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }
+      })(document, "script", "twitter-wjs");
+    </script>
+    <script>
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    </script>
+  </body>
 </html>
