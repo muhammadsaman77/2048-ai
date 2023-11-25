@@ -34,7 +34,7 @@ GameManager.prototype.startAIFast = function () {
   var self = this;
   setTimeout(function () {
     if (!self.isGameTerminated() && self.botActive) {
-      self.botMove(1); // Excludes root level branches
+      self.botMove(2); // Excludes root level branches
       self.startAIFast();
     }
   }, 300);

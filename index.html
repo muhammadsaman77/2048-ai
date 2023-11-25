@@ -44,9 +44,7 @@
       </div>
 
       <div class="above-game">
-        <p class="game-intro">
-          Join the numbers and get to the <strong>2048 tile!</strong>
-        </p>
+        <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
         <a class="restart-button">New Game</a>
       </div>
 
@@ -95,56 +93,6 @@
       </div>
 
       <hr />
-
-      <!-- <button onclick="startTimer()">Start</button>
-      <button onclick="stopTimer()">Stop</button>
-      <button onclick="resetTimer()">Reset</button> -->
-
-      <script>
-        let timer;
-        let seconds = 0;
-        let minutes = 0;
-        let hours = 0;
-
-        function startTimer() {
-          timer = setInterval(updateTimer, 1000);
-        }
-
-        function stopTimer() {
-          clearInterval(timer);
-        }
-
-        function resetTimer() {
-          clearInterval(timer);
-          seconds = 0;
-          minutes = 0;
-          hours = 0;
-          updateDisplay();
-        }
-
-        function updateTimer() {
-          seconds++;
-          if (seconds === 60) {
-            seconds = 0;
-            minutes++;
-            if (minutes === 60) {
-              minutes = 0;
-              hours++;
-            }
-          }
-          updateDisplay();
-        }
-
-        function updateDisplay() {
-          const formattedTime =
-            pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
-          document.getElementById("timer").innerText = formattedTime;
-        }
-
-        function pad(value) {
-          return value < 10 ? "0" + value : value;
-        }
-      </script>
     </div>
 
     <script src="js/c_expectimax.js"></script>
